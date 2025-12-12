@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FelevesFeladat.Pages.MyReviewPage"
+             xmlns:vm="clr-namespace:FelevesFeladat.ViewModels"
+             Title="My Reviews">
+    <Grid RowDefinitions="*, Auto">
+        <CollectionView Grid.Row="0"
+                        ItemsSource="{Binding Reviews}"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedReview}"
+                        SelectionChangedCommand="{Binding OpenDetailsCommand}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView>
+                        <Border Margin="10,5" 
+                        Padding="0" 
+                        StrokeShape="RoundRectangle 20"
+                        StrokeThickness="1"
+                        Stroke="MediumPurple"
+                        BackgroundColor="MediumPurple"
+                        >
+                            <Grid ColumnDefinitions="120, *" HeightRequest="120">
+                                <Image Grid.Column="0" 
+                                       Source="{Binding ImagePath}" 
+                                       Aspect="AspectFill" />
+                                <VerticalStackLayout Grid.Column="1" Padding="10">
+                                    <Label Text="{Binding NameOfItem}" FontAttributes="Bold" FontSize="18" TextColor="Black"/>
+                                    <Label Text="{Binding RestaurantName}" TextColor="Black"/>
+                                    <Label Text="{Binding Rating, StringFormat='Értékelés: {0}/5'}" TextColor="Black"/>
+                                    <Label Text="{Binding LocationName}" FontSize="12" TextColor="Black"/>
+
+                                    <Label Text="☁️ Publikálva" 
+                                    IsVisible="{Binding IsPublished}"
+                                    TextColor="Black" FontAttributes="Bold" FontSize="10"/>
+                                </VerticalStackLayout>
+                                <FlyoutBase.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Publikál"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MyReviewPageViewModel}}, Path=PublishCommand}"
+                                        CommandParameter="{Binding .}" />
+
+                                        <MenuFlyoutItem Text="Törlés"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MyReviewPageViewModel}}, Path=DeleteCommand}"
+                                        CommandParameter="{Binding .}" />
+
+                                        <MenuFlyoutItem Text="Módosítás"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MyReviewPageViewModel}}, Path=EditCommand}"
+                                        CommandParameter="{Binding .}" />
+                                    </MenuFlyout>
+                                </FlyoutBase.ContextFlyout>
+                            </Grid>
+                        </Border>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+                <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                    <Label Text="Még nincs értékelésed." HorizontalOptions="Center"/>
+                    <Label Text="Adj hozzá egyet lentről!" TextColor="Gray" HorizontalOptions="Center"/>
+                </StackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+        <HorizontalStackLayout HorizontalOptions="Fill" Grid.Row="1">
+
+            <Button 
+                Text="Új Értékelés"
+                Command="{Binding AddNewCommand}"
+                Margin="20"
+                BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    CornerRadius="25"
+                    HeightRequest="50"
+                    WidthRequest="150"/>
+        </HorizontalStackLayout>
+
+    </Grid>
+</ContentPage>

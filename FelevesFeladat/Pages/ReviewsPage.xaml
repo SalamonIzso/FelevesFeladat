@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FelevesFeladat.Pages.ReviewsPage"
+             Title="Reviews"
+             >
+    <Grid RowDefinitions="Auto, *">
+
+        <Border Grid.Row="0" Margin="10" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+            <SearchBar Placeholder="Keresés étel vagy étterem alapján..." 
+                       BackgroundColor="Transparent"/>
+        </Border>
+
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding PublishedReviews}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border Margin="10,6" 
+                            Padding="12" 
+                            StrokeShape="RoundRectangle 15" 
+                            StrokeThickness="2">
+
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Offset="0,2" Radius="5" Opacity="0.1"/>
+                        </Border.Shadow>
+
+                        <Grid ColumnDefinitions="60, *, Auto" ColumnSpacing="15">
+
+                            <Border Grid.Column="0" 
+                                    StrokeShape="RoundRectangle 30"
+                                    HeightRequest="60" 
+                                    WidthRequest="60"
+                                    StrokeThickness="0">
+                                <Image Source="{Binding ImagePath}" 
+                                       Aspect="AspectFill"
+                                       HeightRequest="60" 
+                                       WidthRequest="60"/>
+                            </Border>
+
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                <Label Text="{Binding NameOfItem}" 
+                                       FontAttributes="Bold" 
+                                       FontSize="16"
+                                       TextColor="White" 
+                                       LineBreakMode="TailTruncation"/>
+
+                                <Label Text="{Binding RestaurantName}" 
+                                       FontSize="14"
+                                       TextColor="White"/>
+
+                                <Label Text="{Binding LocationName}" 
+                                       FontSize="14"
+                                       TextColor="White"/>
+                            </VerticalStackLayout>
+
+                            <Border Grid.Column="2" 
+                                    BackgroundColor="{StaticResource Primary}" 
+                                    StrokeShape="RoundRectangle 12" 
+                                    Padding="10,5" 
+                                    VerticalOptions="Center"
+                                    HeightRequest="35"
+                                    MinimumWidthRequest="50">
+                                <Label Text="{Binding Rating}" 
+                                       TextColor="White" 
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

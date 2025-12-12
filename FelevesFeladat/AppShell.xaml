@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="FelevesFeladat.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:FelevesFeladat"
+    xmlns:views="clr-namespace:FelevesFeladat.Pages"
+    Shell.FlyoutBehavior="Disabled"
+    Title="FelevesFeladat">
+
+    <TabBar>
+        <Tab Title="Saját listám" Icon="icon_list.png">
+            <ShellContent ContentTemplate="{DataTemplate views:MyReviewPage}" />
+        </Tab>
+
+        <Tab Title="Térkép" Icon="icon_map.png">
+            <ShellContent ContentTemplate="{DataTemplate views:MapPage}" />
+        </Tab>
+
+        <Tab Title="Toplista" Icon="icon_star.png">
+            <ShellContent ContentTemplate="{DataTemplate views:ReviewsPage}" />
+        </Tab>
+    </TabBar>
+
+</Shell>
