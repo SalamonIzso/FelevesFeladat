@@ -47,6 +47,10 @@
                                         <MenuFlyoutItem Text="Módosítás"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MyReviewPageViewModel}}, Path=EditCommand}"
                                         CommandParameter="{Binding .}" />
+                                        
+                                        <MenuFlyoutItem Text="Térkép"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MyReviewPageViewModel}}, Path=ShowOnMapCommand}"
+                                        CommandParameter="{Binding .}" />
                                     </MenuFlyout>
                                 </FlyoutBase.ContextFlyout>
                             </Grid>

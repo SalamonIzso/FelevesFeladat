@@ -58,20 +58,28 @@ namespace FelevesFeladat.ViewModels
 
                     menuitem.IsPublished = true;
                     await database.SaveReviewAsync(menuitem);
-
-                    await Shell.Current.DisplayAlert("Siker", "Az értékelés felkerült a toplistára!", "OK");
             }
             else
             {
                 menuitem.IsPublished = false;
                 await database.SaveReviewAsync(menuitem);
-
-                await Shell.Current.DisplayAlert("Info", "Az értékelést levetted a listáról (helyi módosítás).", "OK");
             }
         }
 
+        [RelayCommand]
+        public async Task ShowOnMap(MenuItem reviewData)
+        {
+            if (reviewData == null) return;
 
-        public async Task LoadFromDatabsae() {
+            var navigationParameter = new ShellNavigationQueryParameters()
+            {   
+                { "reviewData", reviewData }
+            };
+            await Shell.Current.GoToAsync(nameof(MapPage), navigationParameter);
+        }
+
+
+        public async Task LoadFromDatabase() {
             Reviews.Clear();
             var itemsFromData = await database.GetReviewsAsync();
             foreach (var item in itemsFromData)

@@ -18,6 +18,6 @@ public partial class MyReviewPage : ContentPage
     {
         base.OnAppearing();
         
-       viewModel?.LoadFromDatabsae();
+       viewModel?.LoadFromDatabase();
     }
 }

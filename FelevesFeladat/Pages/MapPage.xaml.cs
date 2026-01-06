@@ -11,4 +11,10 @@ public partial class MapPage : ContentPage
         this.viewModel = viewModel;
         BindingContext = viewModel;
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        viewModel.LoadMap();
+    }
 }

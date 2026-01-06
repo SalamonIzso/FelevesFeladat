@@ -8,6 +8,7 @@ namespace FelevesFeladat
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(ReviewEditorPage), typeof(ReviewEditorPage));
+            Routing.RegisterRoute(nameof(MapPage), typeof(MapPage));
         }
     }
 }
