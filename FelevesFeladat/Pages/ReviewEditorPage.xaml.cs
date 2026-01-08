@@ -11,6 +11,4 @@ public partial class ReviewEditorPage : ContentPage
 		this.viewModel = viewModel;
 		BindingContext = viewModel;
 	}
-
-
 }

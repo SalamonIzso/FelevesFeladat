@@ -6,21 +6,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace FelevesFeladat.ViewModels
 {
     [QueryProperty(nameof(MenuItemToEdit), "menuItemToEdit")]
     public partial class ReviewEditorPageViewModel : ObservableObject
     {
-        private readonly DataBase dbService;
+        //private readonly DataBase dbService;
+        private readonly IDataBaseService _dbService;
+        private readonly IGeocodingService _geocoding;
+        private readonly IMediaService _media;
 
         [ObservableProperty]
         MenuItem currentReview;
 
-        public ReviewEditorPageViewModel(DataBase dbService)
+        public ReviewEditorPageViewModel(IDataBaseService dbService, IGeocodingService geocoding, IMediaService media)
         {
-            this.dbService = dbService;
-            currentReview = new MenuItem();
+            _dbService = dbService;
+            _geocoding = geocoding;
+            _media = media;
+            CurrentReview = new MenuItem();
         }
         public MenuItem MenuItemToEdit
         {
@@ -41,24 +47,30 @@ namespace FelevesFeladat.ViewModels
                 await Shell.Current.DisplayAlert("Hiba", "Adj nevet a kajának!", "OK");
                 return;
             }
-            try
-            {
+            //try
+            //{
 
-                var locations = await Geocoding.Default.GetLocationsAsync(CurrentReview.LocationName);
-                var location = locations?.FirstOrDefault();
+            //    var locations = await Geocoding.Default.GetLocationsAsync(CurrentReview.LocationName);
+            //    var location = locations?.FirstOrDefault();
 
-                if (location != null)
-                {
-                    // Ha megvan, beírjuk a Review objektumba
-                    CurrentReview.Latitude = location.Latitude;
-                    CurrentReview.Longitude = location.Longitude;
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Geocoding hiba: {ex.Message}");
-            }
-            await dbService.SaveReviewAsync(CurrentReview);
+            //    if (location != null)
+            //    {
+            //        // Ha megvan, beírjuk a Review objektumba
+            //        CurrentReview.Latitude = location.Latitude;
+            //        CurrentReview.Longitude = location.Longitude;
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    System.Diagnostics.Debug.WriteLine($"Geocoding hiba: {ex.Message}");
+            //}
+            //var location = await _geocoding.GetLocationAsync(CurrentReview.LocationName);
+            //if (location != null)
+            //{
+            //    CurrentReview.Latitude = location.Latitude;
+            //    CurrentReview.Longitude = location.Longitude;
+            //}
+            await _dbService.SaveReviewAsync(CurrentReview);
             await Shell.Current.GoToAsync("..");
         }
      

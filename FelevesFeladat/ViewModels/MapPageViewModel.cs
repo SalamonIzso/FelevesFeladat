@@ -14,23 +14,11 @@ namespace FelevesFeladat.ViewModels
     [QueryProperty(nameof(ReviewData), "reviewData")]
     public partial class MapPageViewModel : ObservableObject
     {
-        private readonly DataBase database;
 
-        [ObservableProperty]
-        string mapUrl;
-
-        [ObservableProperty]
-        bool isBusy;
-
-        [ObservableProperty]
-        MenuItem currentReview;
-
-        public MapPageViewModel(DataBase dbService)
-        {
-            this.database = dbService;
-            currentReview = new MenuItem();
-        }
-
+        private readonly IMapService _mapService;
+        private readonly IGeocodingService _geoService;
+        [ObservableProperty] string mapUrl;
+        [ObservableProperty] MenuItem currentReview;
         public MenuItem ReviewData
         {
             set
@@ -43,58 +31,28 @@ namespace FelevesFeladat.ViewModels
             }
         }
 
-        public MapPageViewModel()
-        {
-            //LoadMap();
-        }
+        public MapPageViewModel(IMapService mapService) => _mapService = mapService;
 
         public async Task LoadMap()
         {
-            IsBusy = true;
-
-            // Alapértelmezett koordináták (Budapest)
-            double lat = 47.4979;
-            double lon = 19.0402;
-            bool showMarker = false;
-            string url = $"https://nominatim.openstreetmap.org/search?q={Uri.EscapeDataString(CurrentReview.LocationName)}&format=json&limit=1";
-            using var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd(
-            "FelevesFeladat");
-            var json = await client.GetStringAsync(url);
-            //var doci = JsonSerializer.Deserialize(json);
-            //var lat = doci.RootElement[0].GetProperty("lat").GetDouble();
-            //var lon = doci.RootElement[0].GetProperty("lon").GetDouble();
-            // Ha VAN érvényes adatunk, felülírjuk a koordinátákat
-            if (lat != 0 && lon != 0)
+            if (CurrentReview == null)
             {
-                CurrentReview.Latitude = lat;
-                CurrentReview.Longitude = lon;
-                showMarker = true; // Ilyenkor kérjük a piros tűt
+                CurrentReview = new MenuItem();
             }
 
-            // --- INNENTŐL A KÓD KÖZÖS (Nem kell duplán írni) ---
-
-            var culture = CultureInfo.InvariantCulture;
-            double zoomOffset = 0.02; // Zoom szint
-
-            double minLon = lon - zoomOffset;
-            double minLat = lat - zoomOffset;
-            double maxLon = lon + zoomOffset;
-            double maxLat = lat + zoomOffset;
-
-            // URL Generálás
-            //string url = $"https://www.openstreetmap.org/export/embed.html" +
-            //             $"?bbox={minLon.ToString(culture)}%2C{minLat.ToString(culture)}%2C{maxLon.ToString(culture)}%2C{maxLat.ToString(culture)}" +
-            //             $"&layer=mapnik";
-
-            // Ha van konkrét pont, rátesszük a markert is
-            if (showMarker)
+            // 1. Ha van cím, de nincs koordináta, akkor lekérjük
+            if (!string.IsNullOrWhiteSpace(CurrentReview.LocationName) && CurrentReview.Latitude == 0)
             {
-                url += $"&marker={lat.ToString(culture)}%2C{lon.ToString(culture)}";
+                var location = await _geoService.GetLocationAsync(CurrentReview.LocationName);
+                if (location != null)
+                {
+                    CurrentReview.Latitude = location.Latitude;
+                    CurrentReview.Longitude = location.Longitude;
+                }
             }
 
-            MapUrl = url;
-            IsBusy = false;
+            // 2. Legyártjuk az URL-t a már meglévő (vagy frissen lekért) koordinátákkal
+            MapUrl = await _mapService.GetMapUrlAsync(CurrentReview);
         }
     }
 }

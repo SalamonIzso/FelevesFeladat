@@ -7,7 +7,14 @@ using System.Threading.Tasks;
 
 namespace FelevesFeladat.Service
 {
-    public partial class DataBase
+    public interface IDataBaseService
+    {
+        Task<List<MenuItem>> GetReviewsAsync();
+        Task<MenuItem> GetReviewAsync(int id);
+        Task<int> SaveReviewAsync(MenuItem item);
+        Task<int> DeleteReviewAsync(MenuItem item);
+    }
+    public partial class DataBase : IDataBaseService
     {
         
         SQLiteAsyncConnection database;
@@ -23,10 +30,6 @@ namespace FelevesFeladat.Service
             database = new SQLiteAsyncConnection(dbPath);
             await database.CreateTableAsync<MenuItem>();
         }
-
-        // --- CRUD Műveletek ---
-
-        // 1. Összes lekérése (READ)
         public async Task<List<MenuItem>> GetReviewsAsync()
         {
             await Init();
@@ -44,7 +47,6 @@ namespace FelevesFeladat.Service
         public async Task<int> SaveReviewAsync(MenuItem item)
         {
             await Init();
-            //Itt lehet baj hogy az ID kisbetű majd meg kell nézni!!!!!!!!!!!!!!
             if (item.id != 0)
             {
                 return await database.UpdateAsync(item);

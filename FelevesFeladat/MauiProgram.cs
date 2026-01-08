@@ -21,7 +21,12 @@ namespace FelevesFeladat
 #if DEBUG
     		builder.Logging.AddDebug();
             builder.Services.AddSingleton<DataBase>();
+            builder.Services.AddSingleton<IDataBaseService, DataBase>();
+            builder.Services.AddSingleton<IGeocodingService, GeocodingService>();
+            builder.Services.AddSingleton<IMediaService, MediaService>();
+            builder.Services.AddSingleton<IMapService, MapService>();
             builder.Services.AddTransient<Pages.ReviewsPage>();
+
             builder.Services.AddTransient<Pages.MapPage>();
             builder.Services.AddTransient<Pages.ReviewEditorPage>();
             builder.Services.AddSingleton<Pages.MyReviewPage>();
@@ -29,6 +34,8 @@ namespace FelevesFeladat
             builder.Services.AddTransient<ViewModels.ReviewEditorPageViewModel>();
             builder.Services.AddTransient<ViewModels.MapPageViewModel>();
             builder.Services.AddTransient<ViewModels.ReviewsPageViewModel>();
+
+
 #endif
 
             return builder.Build();
